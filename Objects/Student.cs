@@ -6,7 +6,7 @@ namespace UniversityRegistrar
 {
   public class Student
   {
-    private in _id;
+    private int _id;
     private string _name;
 
     public Student(string Name, int Id = 0)
@@ -30,7 +30,7 @@ namespace UniversityRegistrar
     {
       SqlConnection conn = DB.Connection();
       conn.Open();
-      SqlCommand cmd = new SqlCommand("DELETE FROM student;", conn);
+      SqlCommand cmd = new SqlCommand("DELETE FROM students;", conn);
       cmd.ExecuteNonQuery();
     }
 
@@ -169,7 +169,7 @@ namespace UniversityRegistrar
       conn.Open();
       List<Course> courses = new List<Course>{};
 
-      SqlCommand cmd = new SqlCommand("SELECT c.id, c.name from students s join course_students cs on (cs.student_id = s.id) join courses c on (c.id = cs.course_id) WHERE s.id = @StudentId", conn);
+      SqlCommand cmd = new SqlCommand("SELECT c.id, c.name from students s join course_students cs on (cs.student_id = s.id) join course c on (c.id = cs.course_id) WHERE s.id = @StudentId", conn);
 
       SqlParameter studentIdParameter = new SqlParameter();
       studentIdParameter.ParameterName = "@StudentId";
@@ -180,7 +180,7 @@ namespace UniversityRegistrar
       {
         int courseId = rdr.GetInt32(0);
         string courseName = rdr.GetString(1);
-        Course newCourse = new Course(courseName, courseId)
+        Course newCourse = new Course(courseName, courseId);
         courses.Add(newCourse);
 
       }
