@@ -182,7 +182,6 @@ namespace UniversityRegistrar
         string courseName = rdr.GetString(1);
         Course newCourse = new Course(courseName, courseId);
         courses.Add(newCourse);
-
       }
       if (rdr != null)
       {
