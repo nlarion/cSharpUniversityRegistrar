@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello Friend!</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+  </head>
+  <body>
+    <h1>Add a new student</h1>
+    <form action="/students/new" method="post">
+      <label for="student-name">Student name:</label>
+      <input id="student-name" name="student-name" type="text">
+      <label for="student-date">Student date:</label>
+      <input id="student-date" name="student-date" type="date">
+      <select name="course-id">
+        @foreach (var course in Model)
+        {
+          <option value="@course.GetId()">@course.GetName()</option>
+        }
+      </select>
+
+      <button type="submit">Add new student</button>
+    </form>
+    <p><a href="/">Back home</a></p>
+    <p><a href="/students">View all students</a></p>
+  </body>
+</html>

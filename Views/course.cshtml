@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Hello Friend!</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
+  </head>
+  <body>
+
+    <h2>Here are all the students in this course:</h2>
+
+    @if (@Model["CourseStudent"].Count == 0)
+    {
+      <p>No courseTasks have been added yet!</p>
+    }
+    else
+    {
+      <ol>
+        @foreach (var student in @Model["CourseStudent"])
+        {
+          <li>@student.GetName()</li>
+        }
+      </ol>
+    }
+    <h4>Add a student to this course:</h4>
+    <form action='/course/add_student' method='post'>
+      <input id='course-id' name='course-id' type='hidden' value='@Model["course"].GetId()'>
+      <label for='student-id'>Select a student</label>
+      <select id='student-id' name='student-id' type='text'>
+        @foreach (var student in @Model["allStudents"])
+        {
+          <option value='@student.GetId()'>@student.GetName()</option>
+        }
+      </select>
+      <button type='submit'>Add</button>
+    </form>
+    <p><a href="/students/new">Add a new student</a></p>
+    <p><a href="/">Return to Main Page</a></p>
+  </body>
+</html>
