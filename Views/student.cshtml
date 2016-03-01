@@ -14,7 +14,7 @@
       <ul>
         @foreach (var course in @Model["studentCourses"])
         {
-          <li>@course.GetName()</li>
+          <li>@course.GetName() -- @course.GetCourseNumber()</li>
         }
       </ul>
     }

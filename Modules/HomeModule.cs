@@ -44,6 +44,8 @@ namespace UniversityRegistrar
       {
         Student newStudent = new Student(Request.Form["student-name"],Request.Form["student-date"]);
         newStudent.Save();
+        Course newCourse = Course.Find(Request.Form["course-id"]);
+        newStudent.AddCourse(newCourse);
         List<Student> AllStudents = Student.GetAll();
         return View["students.cshtml", AllStudents];
       };

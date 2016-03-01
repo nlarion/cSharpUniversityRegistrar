@@ -6,7 +6,7 @@
   </head>
   <body>
 
-    <h2>Here are all the students in this course:</h2>
+    <h2>Here are all the students in @Model["course"].GetName() -- @Model["course"].GetCourseNumber():</h2>
 
     @if (@Model["CourseStudent"].Count == 0)
     {
@@ -17,7 +17,7 @@
       <ol>
         @foreach (var student in @Model["CourseStudent"])
         {
-          <li>@student.GetName()</li>
+          <li>@student.GetName() -- @student.GetDate().ToString("d");</li>
         }
       </ol>
     }

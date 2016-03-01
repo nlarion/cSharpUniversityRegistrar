@@ -38,7 +38,7 @@ namespace UniversityRegistrar
 
       List<Course> result = Course.GetAll();
       List<Course> testList = new List<Course>{testCourse};
-
+      
       Assert.Equal(testList, result);
     }
 

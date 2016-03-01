@@ -15,7 +15,7 @@
       <ul>
         @foreach (var student in Model)
         {
-          <li><a href="/students/@student.GetId()">@student.GetName()</li>
+          <li><a href="/students/@student.GetId()">@student.GetName() -- @student.GetDate().ToString("d")</li>
         }
       </ul>
       <form action="/students/delete" method="post">
