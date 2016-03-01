@@ -23,8 +23,8 @@ namespace UniversityRegistrar
     {
 
       //Arrange, Act
-      Student firstStudent = new Student("Dean");
-      Student secondStudent = new Student("Dean");
+      Student firstStudent = new Student("Dean", new DateTime(2001,2,2));
+      Student secondStudent = new Student("Dean", new DateTime(2001,2,2));
 
       //Assert
       Assert.Equal(firstStudent, secondStudent);
@@ -34,7 +34,7 @@ namespace UniversityRegistrar
     public void Test_Save()
     {
       //Arrange
-      Student testStudent = new Student("Dean");
+      Student testStudent = new Student("Dean", new DateTime(2001,2,2));
       testStudent.Save();
 
       //Act
@@ -49,7 +49,7 @@ namespace UniversityRegistrar
     public void Test_SaveAssignsIdToObject()
     {
       //Arrange
-      Student testStudent = new Student("Dean");
+      Student testStudent = new Student("Dean", new DateTime(2001,2,2));
       testStudent.Save();
 
       //Act
@@ -66,7 +66,7 @@ namespace UniversityRegistrar
     public void Test_FindFindsStudentInDatabase()
     {
       //Arrange
-      Student testStudent = new Student("Dean");
+      Student testStudent = new Student("Dean", new DateTime(2001,2,2));
       testStudent.Save();
 
       //Act
@@ -79,11 +79,10 @@ namespace UniversityRegistrar
     [Fact]
     public void Test_Delete_DeletesStudentAssociationsFromDatabase()
     {
-      Course testCourse = new Course("Math");
+      Course testCourse = new Course("Math", "MATH9001");
       testCourse.Save();
 
-      string testName = "Dean";
-      Student testStudent = new Student(testName);
+      Student testStudent = new Student("Dean", new DateTime(2001,2,2));
       testStudent.Save();
 
       testStudent.AddCourse(testCourse);

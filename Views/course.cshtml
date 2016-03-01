@@ -26,7 +26,7 @@
       <input id='course-id' name='course-id' type='hidden' value='@Model["course"].GetId()'>
       <label for='student-id'>Select a student</label>
       <select id='student-id' name='student-id' type='text'>
-        @foreach (var student in @Model["allStudents"])
+        @foreach (var student in @Model["AllStudents"])
         {
           <option value='@student.GetId()'>@student.GetName()</option>
         }

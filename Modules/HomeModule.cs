@@ -30,7 +30,7 @@ namespace UniversityRegistrar
       };
       Post["/courses/new"] = _ =>
       {
-        Course newCourse = new Course(Request.Form["course-name"]);
+        Course newCourse = new Course(Request.Form["course-name"],Request.Form["course-number"]);
         newCourse.Save();
         List<Course> AllCourses = Course.GetAll();
         return View["courses.cshtml",AllCourses];
@@ -42,7 +42,7 @@ namespace UniversityRegistrar
       };
       Post["/students/new"] = _ =>
       {
-        Student newStudent = new Student(Request.Form["student-name"]);
+        Student newStudent = new Student(Request.Form["student-name"],Request.Form["student-date"]);
         newStudent.Save();
         List<Student> AllStudents = Student.GetAll();
         return View["students.cshtml", AllStudents];
@@ -50,7 +50,8 @@ namespace UniversityRegistrar
       Post["/students/delete"] = _ =>
       {
         Student.DeleteAll();
-        return View["students.cshtml"];
+        List<Student> AllStudents = Student.GetAll();
+        return View["students.cshtml", AllStudents];
       };
       Get["/students/{id}"] = parameters =>
       {
@@ -60,7 +61,7 @@ namespace UniversityRegistrar
         List<Course> AllCourses = Course.GetAll();
         model.Add("student", selectedStudent);
         model.Add("studentCourses", studentCourses);
-        model.Add("AllCourse", AllCourses);
+        model.Add("AllCourses", AllCourses);
         return View["student.cshtml", model];
       };
       Get["/courses/{id}"] = parameters =>
@@ -71,27 +72,30 @@ namespace UniversityRegistrar
         List<Student> AllStudents = Student.GetAll();
         model.Add("course", SelectedCourse);
         model.Add("CourseStudent", CourseStudent);
-        model.Add("allStudents", AllStudents);
+        model.Add("AllStudents", AllStudents);
         return View["course.cshtml", model];
       };
       Post["/courses/delete"] = _ =>
       {
         Course.DeleteAll();
-        return View["courses.cshtml"];
+        List<Course> AllCourses = Course.GetAll();
+        return View["courses.cshtml", AllCourses];
       };
       Post["/student/add_course"] = _ =>
       {
         Course course = Course.Find(Request.Form["course-id"]);
         Student student = Student.Find(Request.Form["student-id"]);
         student.AddCourse(course);
-        return View["students.cshtml"];
+        List<Student> AllStudents = Student.GetAll();
+        return View["students.cshtml", AllStudents];
       };
       Post["/course/add_student"] = _ =>
       {
         Course course = Course.Find(Request.Form["course-id"]);
         Student student = Student.Find(Request.Form["student-id"]);
         course.AddStudent(student);
-        return View["courses.cshtml"];
+        List<Course> AllCourses = Course.GetAll();
+        return View["courses.cshtml", AllCourses];
       };
     }
   }

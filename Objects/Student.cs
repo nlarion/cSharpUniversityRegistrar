@@ -8,11 +8,13 @@ namespace UniversityRegistrar
   {
     private int _id;
     private string _name;
+    private DateTime _enrollment;
 
-    public Student(string Name, int Id = 0)
+    public Student(string Name, DateTime Enrollment, int Id = 0)
     {
       _id = Id;
       _name = Name;
+      _enrollment = Enrollment;
     }
     public int GetId()
     {
@@ -22,9 +24,17 @@ namespace UniversityRegistrar
     {
       return _name;
     }
-    public void SetName(string newName)
+    public void SetName(string newName, DateTime Enrollment)
     {
       _name = newName;
+    }
+    public DateTime GetDate()
+    {
+      return _enrollment;
+    }
+    public void SetDate(DateTime newEnrollment)
+    {
+      _enrollment = newEnrollment;
     }
     public static void DeleteAll()
     {
@@ -45,7 +55,8 @@ namespace UniversityRegistrar
         Student newStudent = (Student) otherStudent;
         bool idEquality = this.GetId() == newStudent.GetId();
         bool nameEquality = this.GetName() == newStudent.GetName();
-        return (idEquality && nameEquality);
+        bool enrollmentEquality = this.GetDate() == newStudent.GetDate();
+        return (idEquality && nameEquality && enrollmentEquality);
       }
     }
     public static List<Student> GetAll()
@@ -56,14 +67,15 @@ namespace UniversityRegistrar
       SqlDataReader rdr = null;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("SELECT * FROM students;", conn);
+      SqlCommand cmd = new SqlCommand("SELECT * FROM students order by date DESC;", conn);
       rdr = cmd.ExecuteReader();
 
       while(rdr.Read())
       {
         int studentId = rdr.GetInt32(0);
         string studentName = rdr.GetString(1);
-        Student newStudent = new Student(studentName, studentId);
+        DateTime studentDate = rdr.GetDateTime(2);
+        Student newStudent = new Student(studentName, studentDate, studentId);
         allStudents.Add(newStudent);
       }
       if (rdr != null)
@@ -82,12 +94,17 @@ namespace UniversityRegistrar
       SqlDataReader rdr;
       conn.Open();
 
-      SqlCommand cmd = new SqlCommand("INSERT INTO students(name) OUTPUT INSERTED.id VALUES(@StudentName);", conn);
+      SqlCommand cmd = new SqlCommand("INSERT INTO students(name, date) OUTPUT INSERTED.id VALUES(@StudentName, @Date);", conn);
 
       SqlParameter nameParameter = new SqlParameter();
       nameParameter.ParameterName = "@StudentName";
       nameParameter.Value = this.GetName();
 
+      SqlParameter dateParameter = new SqlParameter();
+      dateParameter.ParameterName = "@Date";
+      dateParameter.Value = this.GetDate();
+
+      cmd.Parameters.Add(dateParameter);
       cmd.Parameters.Add(nameParameter);
 
       rdr = cmd.ExecuteReader();
@@ -120,13 +137,14 @@ namespace UniversityRegistrar
 
       int foundStudentId = 0;
       string foundStudentName = null;
-
+      DateTime foundDate = new DateTime();
       while(rdr.Read())
       {
         foundStudentId = rdr.GetInt32(0);
         foundStudentName = rdr.GetString(1);
+        foundDate = rdr.GetDateTime(2);
       }
-      Student foundStudent = new Student(foundStudentName, foundStudentId);
+      Student foundStudent = new Student(foundStudentName, foundDate, foundStudentId);
 
       if(rdr != null)
       {
@@ -169,7 +187,7 @@ namespace UniversityRegistrar
       conn.Open();
       List<Course> courses = new List<Course>{};
 
-      SqlCommand cmd = new SqlCommand("SELECT c.id, c.name from students s join course_students cs on (cs.student_id = s.id) join course c on (c.id = cs.course_id) WHERE s.id = @StudentId", conn);
+      SqlCommand cmd = new SqlCommand("SELECT c.id, c.name, c.course_number from students s join course_students cs on (cs.student_id = s.id) join course c on (c.id = cs.course_id) WHERE s.id = @StudentId", conn);
 
       SqlParameter studentIdParameter = new SqlParameter();
       studentIdParameter.ParameterName = "@StudentId";
@@ -180,7 +198,8 @@ namespace UniversityRegistrar
       {
         int courseId = rdr.GetInt32(0);
         string courseName = rdr.GetString(1);
-        Course newCourse = new Course(courseName, courseId);
+        string courseNumber = rdr.GetString(2);
+        Course newCourse = new Course(courseName, courseNumber, courseId);
         courses.Add(newCourse);
       }
       if (rdr != null)

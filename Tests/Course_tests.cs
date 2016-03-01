@@ -24,8 +24,8 @@ namespace UniversityRegistrar
     [Fact]
     public void Test_Equal_ReturnsTrueForSameName()
     {
-      Course firstCourse = new Course("Underwater Basket Weaving");
-      Course secondCourse = new Course("Underwater Basket Weaving");
+      Course firstCourse = new Course("Underwater Basket Weaving","UBW201");
+      Course secondCourse = new Course("Underwater Basket Weaving","UBW201");
 
       Assert.Equal(firstCourse, secondCourse);
     }
@@ -33,7 +33,7 @@ namespace UniversityRegistrar
     [Fact]
     public void Test_Save_SavesCourseToDatabase()
     {
-      Course testCourse = new Course("Underwater Basket Weaving");
+      Course testCourse = new Course("Underwater Basket Weaving","UBW201");
       testCourse.Save();
 
       List<Course> result = Course.GetAll();
@@ -45,7 +45,7 @@ namespace UniversityRegistrar
     [Fact]
     public void Test_Save_AssignsIdToCourseObject()
     {
-      Course testCourse = new Course("Underwater Basket Weaving");
+      Course testCourse = new Course("Underwater Basket Weaving","UBW201");
       testCourse.Save();
 
       Course savedCourse = Course.GetAll()[0];
@@ -59,7 +59,7 @@ namespace UniversityRegistrar
     public void Test_Find_FindsCourseInDatabase()
     {
       //Arrange
-      Course testCourse = new Course("Underwater Basket Weaving");
+      Course testCourse = new Course("Underwater Basket Weaving","UBW201");
       testCourse.Save();
 
       //Act
@@ -72,12 +72,12 @@ namespace UniversityRegistrar
     [Fact]
     public void Test_GetStudents_RetrievesAllStudentsWithCourse()
     {
-      Course testCourse = new Course("Underwater Basket Weaving");
+      Course testCourse = new Course("Underwater Basket Weaving","UBW201");
       testCourse.Save();
 
-      Student firstStudent = new Student("James");
+      Student firstStudent = new Student("James", new DateTime(2001,2,2));
       firstStudent.Save();
-      Student secondStudent = new Student("Jimmy");
+      Student secondStudent = new Student("Jimmy", new DateTime(2001,2,2));
       secondStudent.Save();
 
       testCourse.AddStudent(firstStudent);
@@ -92,13 +92,13 @@ namespace UniversityRegistrar
     public void Test_AddStudent_AddsStudentToCourse()
     {
       //Arrange
-      Course testCourse = new Course("Underwater Basket Weaving");
+      Course testCourse = new Course("Underwater Basket Weaving","UBW201");
       testCourse.Save();
 
-      Student testStudent = new Student("James");
+      Student testStudent = new Student("James", new DateTime(2001,2,2));
       testStudent.Save();
 
-      Student testStudent2 = new Student("Water the garden");
+      Student testStudent2 = new Student("Water the garden", new DateTime(2001,2,2));
       testStudent2.Save();
 
       //Act
@@ -116,12 +116,10 @@ namespace UniversityRegistrar
      public void Test_Delete_DeletesCourseFromDatabase()
      {
        //Arrange
-       string name1 = "Home stuff";
-       Course testCourse1 = new Course(name1);
+       Course testCourse1 = new Course("Home stuff","UBW201");
        testCourse1.Save();
 
-       string name2 = "Work stuff";
-       Course testCourse2 = new Course(name2);
+       Course testCourse2 = new Course("Work stuff","UBW201");
        testCourse2.Save();
 
        //Act
@@ -136,11 +134,10 @@ namespace UniversityRegistrar
     [Fact]
     public void Test_Delete_DeletesCourseAssociationsFromDatabase()
     {
-      Student testStudent = new Student("James");
+      Student testStudent = new Student("James", new DateTime(2001,2,2));
       testStudent.Save();
 
-      string testName = "Home stuff";
-      Course testCourse = new Course(testName);
+      Course testCourse = new Course("Home stuff","UBW201");
       testCourse.Save();
 
       testCourse.AddStudent(testStudent);
